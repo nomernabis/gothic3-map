@@ -89,13 +89,15 @@
                 })
 
                 var image = 'icon_marker_chest32.png'
+                var root_icon = 'icon_marker_root34.png'
 
+                markers['roots'] = []
                 var http = new XMLHttpRequest()
                 http.open('GET', 'http://localhost:2000/data', true)
                 http.onload = function(){
                     data = JSON.parse(http.responseText)
-                    for (var i=0; i < data.length; ++i){
-                        var item = data[i]
+                    for (var i=0; i < data.chests.length; ++i){
+                        var item = data.chests[i]
                         var marker = new google.maps.Marker({
                             position: {lat: Number(item.lat), lng: Number(item.lng)},
                             map: map,
@@ -103,6 +105,16 @@
                             icon: image
                         })
                         markers['chests'].push(marker)
+                    }
+                    for(var i=0; i < data.roots.length; ++i){
+                        var item = data.roots[i]
+                        var marker = new google.maps.Marker({
+                            position: {lat: Number(item.lat), lng: Number(item.lng)},
+                            map: map,
+                            title: 'Hello',
+                            icon: root_icon
+                        })
+                        markers['roots'].push(marker)
                     }
                 }
                 http.send()

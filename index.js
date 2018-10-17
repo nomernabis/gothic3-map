@@ -5,9 +5,13 @@ var http = require('http'),
 http.createServer(function(request, response) {
     if(request.url == '/data'){
         var json = fileSystem.readFileSync('coords.json')
+        var roots = fileSystem.readFileSync('plants_dragon_root.json')
+
         response.writeHead(200, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'})
-        console.log(json)
-        response.end(json)
+        var jsonResponse = {chests: JSON.parse(json), roots: JSON.parse(roots)}
+
+
+        response.end(Buffer.from(JSON.stringify(jsonResponse)))
     } else {
         console.log('url', request.url)
         if(request.url != '/'){
