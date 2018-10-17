@@ -16,8 +16,22 @@
         </style>
     </head>
     <body>
+        <button id="chests" onclick="showMarkers()">Chests</button>
+        <button id="dragon_roots">Dragon Roots</button>
         <div id="map"></div>
         <script>
+
+            var markers = {}
+            markers['chests'] = []
+            var visible = true
+            function showMarkers(){
+                visible = !visible
+                console.log('markers')
+                for(var i=0; i < markers['chests'].length; ++i){
+                    var marker = markers['chests'][i]
+                    marker.setVisible(visible)
+                }
+            }
 
             var data = null
             function initMap(){
@@ -47,7 +61,7 @@
                         return url
                     },
                     tileSize: new google.maps.Size(256, 256),
-                    maxZoom: 4,
+                    maxZoom: 5,
                     minZoom: 3,
                     radius: 173800,
                     name: 'Moon'
@@ -76,8 +90,6 @@
 
                 var image = 'icon_marker_chest32.png'
 
-
-                console.log(image)
                 var http = new XMLHttpRequest()
                 http.open('GET', 'http://localhost:2000/data', true)
                 http.onload = function(){
@@ -90,6 +102,7 @@
                             title: 'Hello',
                             icon: image
                         })
+                        markers['chests'].push(marker)
                     }
                 }
                 http.send()
