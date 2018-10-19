@@ -121,15 +121,6 @@
                 map.mapTypes.set('moon', moonMapType)
                 map.setMapTypeId('moon')
 
-                map.addListener('click', function(e){
-                    console.log('pos', e.latLng.lat(), e.latLng.lng())
-                    var marker = new google.maps.Marker({
-                        position: e.latLng,
-                        map: map
-                    })
-
-                })
-
                 var image = 'icon_marker_chest24.png'
                 var root_icon = 'icon_marker_root24.png'
                 var ks_icon = 'icon_marker_ks24.png'
