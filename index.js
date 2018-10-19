@@ -8,11 +8,12 @@ http.createServer(function(request, response) {
         var roots = fileSystem.readFileSync('data/roots.json')
         var kingSorrels = fileSystem.readFileSync('data/ks.json')
         var goblins = fileSystem.readFileSync('data/goblins.json')
+        var index = fileSystem.readFileSync('map-frontend/map.html')
+
         response.writeHead(200, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'})
         var jsonResponse = {chests: JSON.parse(chests), roots: JSON.parse(roots), kingSorrels: JSON.parse(kingSorrels), goblins: JSON.parse(goblins)}
         response.end(Buffer.from(JSON.stringify(jsonResponse)))
-    } else {
-        if(request.url != '/' && request.url.match('/[0-9]/[0-9]?[0-9]_[0-9]?[0-9].jpg')){
+    } else if(request.url.match('/[0-9]/[0-9]?[0-9]_[0-9]?[0-9].jpg')){
             var filePath = path.join(__dirname, 'tiles/' + request.url);
             try{
                 var stat = fileSystem.statSync(filePath);
@@ -27,11 +28,25 @@ http.createServer(function(request, response) {
                 response.writeHead(200)
                 response.end()
             }
+        } else if(request.url == '/' || request.url == '') {
+            //html
+            fileSystem.readFile('map-frontend/map.html', function(err, data){
+                if(!err){
+                    response.setHeader('Content-type', 'text/html')
+                    response.end(data)
+                }
+            })
         } else {
-            response.writeHead(200)
-            response.write('Doesnt match any!')
-            response.end()
-        }
+            fileSystem.readFile('map-frontend/' + request.url, function(err, data){
+                if(!err){
+                    response.setHeader('Content-type', 'image/png')
+                    response.end(data)
+                } else {
+                    console.log('file not found', request.url)
+                    response.writeHead(404, 'Not Found')
+                    response.end()
+                }
+            })
     }
 })
 .listen(process.env.PORT || 2000);
