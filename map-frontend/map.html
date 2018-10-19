@@ -140,7 +140,7 @@
                 markers['goblins'] = []
 
                 var http = new XMLHttpRequest()
-                http.open('GET', 'http://localhost:2000/data', true)
+                http.open('GET', 'data', true)
                 http.onload = function(){
                     data = JSON.parse(http.responseText)
                     for (var i=0; i < data.chests.length; ++i){
